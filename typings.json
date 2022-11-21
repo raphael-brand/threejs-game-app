@@ -1,7 +1,5 @@
 {
   "globalDependencies": {
-    "three": "registry:dt/three#0.84.0+20170323144537",
-    "three-canvasrenderer": "registry:dt/three-canvasrenderer#0.0.0+20160916163606",
-    "three-projector": "registry:dt/three-projector#0.0.0+20160405225030"
+    "three": "registry:dt/three#0.128.0"
   }
 }
