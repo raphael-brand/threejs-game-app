@@ -13,11 +13,12 @@ acc.setLevel([
   [1, 0, 0, 0, 0, 0, 0, 1],
 ])
 
-const initCanvas = () => {
+function initCanvas(): HTMLCanvasElement {
   const el: HTMLCanvasElement = new HTMLCanvasElement()
   el.id = '#canvas'
-  return document.querySelector(el.id)
+  return document.querySelector(el.id)!
 }
+
 acc.setCanvas(initCanvas())
 
 acc.draw() && acc.printMap()
