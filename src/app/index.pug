@@ -1,0 +1,26 @@
+html
+    head
+        title Canvas - Pacman-alike-playfield (work-in-progress)
+        link(href='https://fonts.googleapis.com/css?family=Fresca')
+        link(href='/css/main.css', rel='stylesheet')
+        script(src='https://threejs.org/build/three.min.js')
+        script(src='https://threejs.org/examples/js/renderers/Projector.js')
+        script(src='https://threejs.org/examples/js/renderers/CanvasRenderer.js')
+        script(type='text/javascript', data-main='js/main', src='js/vendor/require.min.js')
+    body
+        .container
+          canvas#canvas(width=300,height=300)
+          #perspective
+          #perspective_stats
+          .btnWrap
+            button.left='left'
+            button.up='up'
+            button.right='right'
+            button.down='down'
+            
+          .overlay
+            p.text-2x.m-xs-b-lg='starting app ...'
+            
+          div.info.button.text-2x.m-xs-b-lg(title="You can use the arrow keys, too")='Click here to see the map to get from left to top right!'
+            br
+            .innerText=''
