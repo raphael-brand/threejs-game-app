@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 /// <reference path="../../../typings/index.d.ts" />
+import * as THREE from 'three'
 
 import {
   PerspectiveCamera,
   BoxGeometry,
   MeshBasicMaterial,
   Mesh,
-  CanvasRenderer,
+  WebGLRenderer,
 } from 'three'
 
 interface IScene {
@@ -22,7 +23,7 @@ export class Scene implements IScene {
   geometry: THREE.BoxGeometry = new BoxGeometry(0, 0, 0)
   material: THREE.MeshBasicMaterial = new MeshBasicMaterial()
   cube: THREE.Mesh = new Mesh()
-  renderer: THREE.CanvasRenderer = new CanvasRenderer()
+  renderer: THREE.WebGLRenderer = new WebGLRenderer()
 
   container!: HTMLElement
   w: number
@@ -47,11 +48,13 @@ export class Scene implements IScene {
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     this.cube = new THREE.Mesh(this.geometry, this.material)
     this.scene.add(this.cube)
-    this.renderer = new THREE.CanvasRenderer()
+    this.renderer = new THREE.WebGLRenderer()
     this.renderer.setSize(this.w, this.h)
 
     this.camera_start.z = 300
-    this.camera.position = this.camera_start
+    const newLocal = this
+    /*    this.camera.position = this.camera_start */
+    newLocal.camera.position.setZ(300)
     this.renderer.render(this.scene, this.camera)
 
     this.wrapperElement.appendChild(this.container)

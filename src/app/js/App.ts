@@ -1,5 +1,7 @@
 // const log = console.log;
 import { Scene } from './Scene'
+import { Acceleration } from './Acceleration'
+
 const acc = new Acceleration()
 const scene = new Scene()
 acc.setLevel([

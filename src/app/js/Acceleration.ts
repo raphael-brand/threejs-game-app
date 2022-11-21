@@ -117,7 +117,7 @@ class BaseAcceleration implements IAcceleration {
 
   onMove(_callback: Function): void {}
 }
-class Acceleration extends BaseAcceleration {
+export class Acceleration extends BaseAcceleration {
   size: number
 
   //PlayerPosition: PlayerPosition;
@@ -166,6 +166,7 @@ class Acceleration extends BaseAcceleration {
     //draw();
     //console.clear();
     //document.querySelector(".up").focus();
+    // TODO: add overlay, info_button, info_button_text, up, right, down, left
     /**
      *
      *    overlay: HTMLDivElement
