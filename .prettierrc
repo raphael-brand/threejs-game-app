@@ -4,9 +4,8 @@
 	"arrowParens": "avoid",
 	"bracketSpacing": true,
 	"endOfLine": "lf",
-	"jsxBracketSameLine": false,
 	"printWidth": 80,
-	"tabWidth": 2,
+	"tabWidth": 3,
 	"useTabs": true,
 	"trailingComma": "all"
 }
