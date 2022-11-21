@@ -16,7 +16,7 @@ interface IScene {
   perspectiveStats: HTMLDivElement
 }
 
-class Scene implements IScene {
+export class Scene implements IScene {
   scene = new THREE.Scene()
   camera: THREE.PerspectiveCamera = new PerspectiveCamera()
   geometry: THREE.BoxGeometry = new BoxGeometry(0, 0, 0)
