@@ -16,9 +16,8 @@ acc.setLevel([
 ])
 
 function initCanvas(): HTMLCanvasElement {
-  const el: HTMLCanvasElement = new HTMLCanvasElement()
-  el.id = '#canvas'
-  return document.querySelector(el.id)!
+  const el: HTMLCanvasElement = document.querySelector('#canvas')!
+  return el
 }
 
 acc.setCanvas(initCanvas())

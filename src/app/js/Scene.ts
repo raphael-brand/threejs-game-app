@@ -13,7 +13,7 @@ import {
 interface IScene {
   init(): void
   animate(params: Object): void
-  wrapperElement: HTMLDivElement
+  wrapperElement: HTMLBodyElement | null
   perspectiveStats: HTMLDivElement
 }
 
@@ -36,7 +36,7 @@ export class Scene implements IScene {
     this.init()
   }
 
-  wrapperElement!: HTMLDivElement
+  wrapperElement: HTMLBodyElement = document.querySelector('body')
   perspectiveStats!: HTMLDivElement
 
   init() {
