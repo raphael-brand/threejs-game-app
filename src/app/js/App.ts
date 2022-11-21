@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // const log = console.log;
 import { Scene } from './Scene'
 import { Acceleration } from './Acceleration'

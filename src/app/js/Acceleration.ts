@@ -1,13 +1,43 @@
+type Axis = number
+
 /* eslint-disable no-unused-vars */
 class PlayerPosition {
-  x: number
-  y: number
-  z: number
+  _x!: Axis
+  _y!: Axis
+  _z!: Axis
 
-  constructor() {
-    this.x = this.y = this.z = 0
+  static _x: number
+  static _y: number
+  static _z: number
+
+  public static get x(): Axis {
+    return this._x
+  }
+  public static set x(value: Axis) {
+    this._x = value
+  }
+
+  public static get y(): Axis {
+    return this._y
+  }
+  public static set y(value: Axis) {
+    this._y = value
+  }
+
+  public static get z(): Axis {
+    return this._z
+  }
+  public static set z(value: Axis) {
+    this._z = value
+  }
+
+  constructor(x: number, y: number, z: number) {
+    this._x = x
+    this._y = y
+    this._z = z
   }
 }
+
 interface ArrayConstructor {
   from(arrayLike: any, mapFn?: undefined, thisArg?: undefined): Array<any>
 }
@@ -38,8 +68,7 @@ interface IAcceleration {
   free: number
   wall: number
   player: number
-  level: number[][]
-  onMoveCallback: Function
+  _level: number[][]
 
   // map view
   toggleView: boolean
@@ -74,18 +103,15 @@ interface IAcceleration {
  *    ]);
  *     acc.draw() && acc.printMap();
  */
-
 class BaseAcceleration implements IAcceleration {
-  onMoveCallback!: Function
   canvas!: HTMLCanvasElement
   ctx!: CanvasRenderingContext2D
   fieldSize!: number
+  getCode: any
   playerPosition!: PlayerPosition
   playerAt!: PlayerPosition
 
-  level!: number[][]
   size!: number
-  onMoveCallBack!: Function
 
   free!: number
   wall!: number
@@ -102,8 +128,6 @@ class BaseAcceleration implements IAcceleration {
     return true
   }
   printMap(): void {}
-
-  getCode(_x: any) {}
 
   move(_direction: string): any | boolean {}
 
@@ -124,10 +148,9 @@ export class Acceleration extends BaseAcceleration {
   declare canvas: HTMLCanvasElement
   declare ctx: CanvasRenderingContext2D
   fieldSize: number
-  playerPosition: PlayerPosition
+  static playerPosition: PlayerPosition
   playerAt: PlayerPosition
 
-  declare level: number[][]
   declare onMoveCallBack: Function
 
   free: number
@@ -136,19 +159,31 @@ export class Acceleration extends BaseAcceleration {
 
   // map view
   toggleView: boolean
+  static free: any
+  static player: any
+  static playerAt: PlayerPosition
+  private _level: any
+  static _level: any
+  static level: any
+  public get level(): any {
+    return this._level
+  }
+  public set level(value: any) {
+    this._level = value
+  }
 
   constructor() {
     super()
     console.log('constructor called')
     this.size = 300
     console.log(this.size)
-    this.fieldSize = this.size / 1
-    this.playerPosition = new PlayerPosition()
     this.playerAt = this.playerPosition
+    this.fieldSize = this.size / 1
+    this.playerPosition = new PlayerPosition(0, 0, 0)
     this.free = 0
     this.wall = 1
     this.player = 2
-
+    this._level
     this.playerAt = this.playerPosition
 
     Array.from(document.querySelectorAll('button')).forEach(el =>
@@ -209,7 +244,7 @@ export class Acceleration extends BaseAcceleration {
     return this
   }
 
-  getCode(x: string) {
+  public static getCode(x: string) {
     return {
       '38': 'up',
       '40': 'down',
@@ -224,8 +259,8 @@ export class Acceleration extends BaseAcceleration {
     this.ctx.fillStyle = 'lightgreen'
     console.dir(this.playerPosition, this.playerAt)
     this.ctx.fillRect(
-      this.playerPosition.x * this.fieldSize,
-      this.playerPosition.y * this.fieldSize,
+      this.playerPosition._x * this.fieldSize,
+      this.playerPosition._y * this.fieldSize,
       this.fieldSize,
       this.fieldSize,
     )
@@ -235,7 +270,8 @@ export class Acceleration extends BaseAcceleration {
 
   getPosition() {
     const pos = this.playerAt
-    pos.z = pos.y // mhh ...
+    // TODO: change it
+    pos._z = pos._y // mhh ...
     console.dir(pos)
     return this.playerAt ? pos : this.playerPosition
   }
@@ -244,11 +280,12 @@ export class Acceleration extends BaseAcceleration {
     const retObj = {
       handleEvent: this.onMoveCallBack,
     }
-    const code = this.getCode(e.keyCode)
-      ? this.getCode(e.keyCode)
+    const code = Acceleration.getCode(e.keyCode)
+      ? Acceleration.getCode(e.keyCode)
       : e.target.className
     console.log('>>>', code)
-    this.move(code) &&
+
+    Acceleration.move(code) &&
       this.draw() &&
       setTimeout(function () {
         Array.from(document.querySelectorAll('.btnWrap button')).forEach(
@@ -268,66 +305,69 @@ export class Acceleration extends BaseAcceleration {
     return retObj
   }
 
-  move(direction: string) {
-    //console.log("moving", direction);
-    const current = JSON.parse(JSON.stringify(this.playerPosition))
-
+  static move(direction: string) {
+    console.log('moving', direction)
+    console.log('current', this.playerPosition)
+    //const current = JSON.parse(JSON.stringify(this.playerPosition))
     let hasMoved = false
     switch (direction) {
       case 'up':
         if (
-          this.playerPosition.y > 0 &&
-          this.level[this.playerPosition.y - 1] &&
-          this.level[this.playerPosition.y - 1][this.playerPosition.x] ===
+          this.playerPosition._x > 0 &&
+          this._level[this.playerPosition._y - 1] &&
+          this._level[this.playerPosition._y - 1][this.playerPosition._x] ===
             this.free
         ) {
-          --this.playerPosition.y
+          --this.playerPosition._y
           hasMoved = true
         }
         break
       case 'down':
         if (
-          this.playerPosition.y < this.level.length - 1 &&
-          this.level[this.playerPosition.y + 1] &&
-          this.level[this.playerPosition.y + 1][this.playerPosition.x] ===
+          this.playerPosition._y < this.level.length - 1 &&
+          this._level[this.playerPosition._y + 1] &&
+          this._level[this.playerPosition._y + 1][this.playerPosition._x] ===
             this.free
         ) {
-          ++this.playerPosition.y
+          ++this.playerPosition._y
           hasMoved = true
         }
         break
       case 'left':
         if (
-          this.playerPosition.x > 0 &&
-          this.level[this.playerPosition.y][this.playerPosition.x - 1] ===
+          this.playerPosition._x > 0 &&
+          this._level[this.playerPosition._y][this.playerPosition._x - 1] ===
             this.free
         ) {
-          --this.playerPosition.x
+          --this.playerPosition._x
           hasMoved = true
         }
         break
       case 'right':
         if (
-          this.playerPosition.x <
-            this.level[this.playerPosition.y].length - 1 &&
-          this.level[this.playerPosition.y][this.playerPosition.x + 1] ===
+          this.playerPosition._x <
+            this._level[this.playerPosition._y].length - 1 &&
+          this._level[this.playerPosition._y][this.playerPosition._x + 1] ===
             this.free
         ) {
-          ++this.playerPosition.x
+          ++this.playerPosition._x
           hasMoved = true
         }
         break
     }
 
     if (hasMoved) {
-      this.level[current.y][current.x] = this.free
-      this.level[this.playerPosition.y][this.playerPosition.x] = this.player
+      this._level[current.y][current.x] = this.free
+      this._level[this.playerPosition._y][this.playerPosition._x] = this.player
       this.playerAt = this.playerPosition
       //console.clear();
       console.log('Player has moved ' + direction)
       this.onMoveCallBack()
     }
     return hasMoved
+  }
+  static onMoveCallBack() {
+    throw new Error('Method not implemented.')
   }
 
   onWindowResize(update: boolean) {
@@ -342,7 +382,7 @@ export class Acceleration extends BaseAcceleration {
     let str = ''
 
     const info =
-      'Player at ' + this.playerAt.y + ' ' + this.playerAt.x + '\n <br>'
+      'Player at ' + this.playerAt._y + ' ' + this.playerAt._x + '\n <br>'
 
     for (const row of this.level) {
       str += row.toString().split(',').join('  ') + '\n <br>'
@@ -363,7 +403,8 @@ export class Acceleration extends BaseAcceleration {
 
   setLevel(map: number[][]) {
     this.level = map
-    console.log(this.size, this.level[0].length)
+    console.log('level:')
+    console.info(this.size, this.level[0].length)
     this.fieldSize = Math.floor(this.size / this.level[0].length)
     console.log(Math.floor(this.size / this.level[0].length))
   }
